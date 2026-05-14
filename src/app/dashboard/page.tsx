@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Video, PenTool, Hash, Calendar, Download, Copy, Sparkles, Image as ImageIcon } from "lucide-react"
+import { Video, PenTool, Hash, Calendar, Download, Copy, Sparkles, Zap, Image as ImageIcon } from "lucide-react"
 
 export default function DashboardPage() {
   const [isGenerating, setIsGenerating] = useState(false)

@@ -1,6 +1,5 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Film, Instagram, Twitter, Youtube } from "lucide-react"
 
 export function Footer() {
   return (
@@ -17,10 +16,10 @@ export function Footer() {
             <p className="text-sm text-muted-foreground mb-4">
               AI-powered video creation for modern brands. Generate viral content in seconds.
             </p>
-            <div className="flex gap-4 text-muted-foreground">
-              <Link href="#" className="hover:text-primary transition-colors"><Twitter size={20} /></Link>
-              <Link href="#" className="hover:text-primary transition-colors"><Instagram size={20} /></Link>
-              <Link href="#" className="hover:text-primary transition-colors"><Youtube size={20} /></Link>
+            <div className="flex gap-4 text-sm font-medium text-muted-foreground">
+              <Link href="#" className="hover:text-primary transition-colors">Twitter</Link>
+              <Link href="#" className="hover:text-primary transition-colors">Instagram</Link>
+              <Link href="#" className="hover:text-primary transition-colors">YouTube</Link>
             </div>
           </div>
           
