@@ -101,36 +101,29 @@ export default function DashboardPage() {
             ) : result ? (
               <div className="flex-1 overflow-y-auto space-y-6 pr-2">
                 <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                  <h3 className="text-sm font-medium text-primary mb-2 flex items-center"><Zap size={14} className="mr-1"/> Viral Hook</h3>
-                  <p className="text-white text-lg font-medium">"Stop scrolling! If you live in Austin and drink coffee, you're probably making this one huge mistake."</p>
-                </div>
-                
-                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                  <h3 className="text-sm font-medium text-secondary mb-2 flex items-center"><Video size={14} className="mr-1"/> Video Script (0:15s)</h3>
-                  <div className="space-y-3 text-sm text-muted-foreground">
-                    <p><strong className="text-white">Visual 0:00-0:03:</strong> Fast zoom into a perfectly poured latte art breaking.</p>
-                    <p><strong className="text-white">Audio:</strong> Trending CapCut audio (#4 on charts right now).</p>
-                    <p><strong className="text-white">Voiceover:</strong> "Stop scrolling! If you live in Austin and drink coffee, you're probably making this one huge mistake."</p>
-                    <p><strong className="text-white">Visual 0:03-0:08:</strong> B-roll of aesthetic cafe interior, showing customers working.</p>
-                    <p><strong className="text-white">Voiceover:</strong> "You're paying $8 for basic beans. At RoastCraft, we source directly from single-origin farms."</p>
+                  <h3 className="text-sm font-medium text-primary mb-2 flex items-center"><Calendar size={14} className="mr-1"/> Week 1: Hooking the Audience</h3>
+                  <div className="space-y-4 text-sm text-muted-foreground">
+                    <p><strong className="text-white">Day 1 (Short):</strong> "3 AI tools that feel illegal to know (for creators)." Fast-paced listicle. #3 is ReelForge AI.</p>
+                    <p><strong className="text-white">Day 2 (Community):</strong> Image poll: "How many hours a week do you spend editing?"</p>
+                    <p><strong className="text-white">Day 3 (Long-Form):</strong> "I Automated My Entire YouTube Workflow." Deep dive into AI tools.</p>
+                    <p><strong className="text-white">Day 4 (Short):</strong> "The 5-second hook formula that MrBeast uses." Text-on-screen hook.</p>
+                    <p><strong className="text-white">Day 5 (Short):</strong> "Stop writing your own scripts." Controversial take on AI scripting.</p>
                   </div>
                 </div>
                 
                 <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                  <h3 className="text-sm font-medium text-primary mb-2 flex items-center"><PenTool size={14} className="mr-1"/> Caption & Ad Copy</h3>
-                  <p className="text-sm text-muted-foreground whitespace-pre-line">
-                    Don't settle for average coffee in the ATX. ☕️✨
-                    
-                    We just dropped our new single-origin Ethiopian roast and it's life-changing. Come visit us on 5th Street and mention this reel for 15% off your first cup!
-                    
-                    Save this post for your next coffee run! 👇
-                  </p>
+                  <h3 className="text-sm font-medium text-secondary mb-2 flex items-center"><Video size={14} className="mr-1"/> Day 1 Script Preview</h3>
+                  <div className="space-y-3 text-sm text-muted-foreground">
+                    <p><strong className="text-white">Visual:</strong> Fast-paced screen recording of editing timeline, then cut to you holding a coffee.</p>
+                    <p><strong className="text-white">Audio:</strong> Trending lo-fi beat.</p>
+                    <p><strong className="text-white">Voiceover:</strong> "Stop spending 10 hours a week editing. Here are 3 AI tools that feel illegal to know in 2024. Number 3 literally runs my channel."</p>
+                  </div>
                 </div>
                 
                 <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                  <h3 className="text-sm font-medium text-secondary mb-2 flex items-center"><Hash size={14} className="mr-1"/> Hashtags</h3>
+                  <h3 className="text-sm font-medium text-primary mb-2 flex items-center"><Hash size={14} className="mr-1"/> Suggested Hashtags</h3>
                   <p className="text-sm text-muted-foreground">
-                    #AustinCoffee #ATXLife #CoffeeRoasters #SpecialtyCoffee #AustinEats #TexasCoffee
+                    #CreatorEconomy #AItools #YouTubeGrowth #ContentCreator #ReelForgeAI
                   </p>
                 </div>
               </div>
