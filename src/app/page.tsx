@@ -29,10 +29,9 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
             <Link href="/signup">
               <Button size="lg" variant="glow" className="w-full sm:w-auto text-lg px-8">
-                Start For Free <ChevronRight className="ml-2" size={20} />
+                Start Creating Free <ChevronRight className="ml-2" size={20} />
               </Button>
             </Link>
-            <p className="text-sm text-muted-foreground mt-4 sm:mt-0 sm:ml-4">No credit card required.</p>
           </div>
           
           {/* Mockup Dashboard Preview */}
@@ -102,59 +101,6 @@ export default function Home() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section id="pricing" className="py-24 bg-card/20 border-y border-white/5">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold font-outfit mb-4">Simple, Transparent <span className="text-gradient">Pricing</span></h2>
-            <p className="text-muted-foreground">Start for free, upgrade when you need more power.</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Starter Plan */}
-            <div className="glass p-8 rounded-3xl border border-white/10">
-              <h3 className="text-2xl font-bold mb-2">Starter</h3>
-              <p className="text-muted-foreground mb-6">Perfect for small businesses and solo creators.</p>
-              <div className="mb-6">
-                <span className="text-4xl font-extrabold">₹999</span><span className="text-muted-foreground">/mo</span>
-              </div>
-              <ul className="space-y-4 mb-8">
-                {['50 AI Credits/month', 'Basic Script Generator', 'Caption & Hashtags', 'Email Support'].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <CheckCircle2 size={18} className="text-secondary" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link href="/signup">
-                <Button className="w-full" variant="outline">Get Started</Button>
-              </Link>
-            </div>
-            
-            {/* Agency Plan */}
-            <div className="glass-card p-8 rounded-3xl border-primary/50 relative overflow-hidden">
-              <div className="absolute top-0 right-0 bg-primary text-xs font-bold px-3 py-1 rounded-bl-lg">MOST POPULAR</div>
-              <h3 className="text-2xl font-bold mb-2">Agency</h3>
-              <p className="text-muted-foreground mb-6">For agencies managing multiple clients.</p>
-              <div className="mb-6">
-                <span className="text-4xl font-extrabold">₹2999</span><span className="text-muted-foreground">/mo</span>
-              </div>
-              <ul className="space-y-4 mb-8">
-                {['Unlimited AI Credits', 'Advanced Script Generator', '30-Day Calendar Generator', 'Export to PDF', 'Priority Support'].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <CheckCircle2 size={18} className="text-primary" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link href="/signup">
-                <Button className="w-full" variant="glow">Upgrade to Agency</Button>
-              </Link>
-            </div>
           </div>
         </div>
       </section>

@@ -44,21 +44,11 @@ export default function DashboardLayout({
         </div>
         
         <div className="p-4 border-t border-white/5 space-y-1">
-          <div className="mb-4 px-3 py-3 rounded-lg bg-white/5 border border-white/10">
-            <p className="text-xs text-muted-foreground mb-2">Credits Remaining</p>
-            <div className="flex justify-between items-end">
-              <span className="text-lg font-bold text-white">42<span className="text-sm text-muted-foreground font-normal">/50</span></span>
-              <Link href="/dashboard/billing" className="text-xs text-primary hover:underline">Upgrade</Link>
-            </div>
-            <div className="w-full h-1.5 bg-white/10 rounded-full mt-2 overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-primary to-secondary w-[84%]"></div>
-            </div>
+          <div className="mb-4 px-3 py-3 rounded-lg bg-primary/10 border border-primary/20 text-center">
+            <p className="text-sm font-medium text-primary">Free Forever Plan</p>
+            <p className="text-xs text-muted-foreground mt-1">Unlimited generations</p>
           </div>
           
-          <Link href="/dashboard/billing" className="flex items-center gap-3 px-3 py-2 rounded-lg text-muted-foreground hover:bg-white/5 hover:text-white transition-colors">
-            <CreditCard size={18} />
-            Billing
-          </Link>
           <Link href="/dashboard/settings" className="flex items-center gap-3 px-3 py-2 rounded-lg text-muted-foreground hover:bg-white/5 hover:text-white transition-colors">
             <Settings size={18} />
             Settings
