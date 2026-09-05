@@ -1,22 +1,20 @@
-import { OpenAI } from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
-
-// Initialize OpenAI client
-// Note: This requires an OPENAI_API_KEY in your .env.local file
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || 'dummy_key_to_prevent_crash',
-});
 
 export async function POST(req: Request) {
   try {
     const { niche, audience, vibe } = await req.json();
 
-    if (!process.env.OPENAI_API_KEY) {
+    if (!process.env.GEMINI_API_KEY) {
       return NextResponse.json(
-        { error: 'Missing OPENAI_API_KEY. Please add it to your .env.local file.' },
+        { error: 'Missing GEMINI_API_KEY. Please add it to your .env.local file.' },
         { status: 400 }
       );
     }
+
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    // Using the fastest, most cost-effective model (which is free in the free tier)
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     const prompt = `You are an expert YouTube Shorts and Instagram Reels strategist. 
     Create a highly engaging, viral 15-second video script based on these details:
@@ -35,12 +33,10 @@ export async function POST(req: Request) {
     
     HASHTAGS: [Provide 5 trending hashtags]`;
 
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: [{ role: 'user', content: prompt }],
-    });
+    const result = await model.generateContent(prompt);
+    const responseText = result.response.text();
 
-    return NextResponse.json({ result: response.choices[0].message.content });
+    return NextResponse.json({ result: responseText });
   } catch (error: any) {
     console.error('API Error:', error);
     return NextResponse.json(
