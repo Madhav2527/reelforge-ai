@@ -7,13 +7,37 @@ import { Video, PenTool, Hash, Calendar, Download, Copy, Sparkles, Zap, Image as
 export default function DashboardPage() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [result, setResult] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
   
-  const handleGenerate = () => {
+  // Form State
+  const [niche, setNiche] = useState("")
+  const [audience, setAudience] = useState("")
+  const [vibe, setVibe] = useState("Energetic & Fast-paced")
+  
+  const handleGenerate = async () => {
     setIsGenerating(true)
-    setTimeout(() => {
-      setResult("Sample output generated!")
+    setError(null)
+    setResult(null)
+    
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ niche, audience, vibe }),
+      })
+      
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Something went wrong')
+      }
+      
+      setResult(data.result)
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
       setIsGenerating(false)
-    }, 2000)
+    }
   }
 
   return (
@@ -25,7 +49,7 @@ export default function DashboardPage() {
         </div>
         <Button variant="glow" onClick={handleGenerate} disabled={isGenerating}>
           <Sparkles className="mr-2" size={18} />
-          {isGenerating ? "Generating..." : "Generate 30 Days of Content"}
+          {isGenerating ? "Generating..." : "Generate Reel Script"}
         </Button>
       </div>
 
@@ -40,6 +64,8 @@ export default function DashboardPage() {
                 <label className="block text-sm font-medium text-muted-foreground mb-1.5">Business / Niche</label>
                 <input 
                   type="text" 
+                  value={niche}
+                  onChange={(e) => setNiche(e.target.value)}
                   placeholder="e.g. Coffee Shop in Austin" 
                   className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                 />
@@ -49,6 +75,8 @@ export default function DashboardPage() {
                 <label className="block text-sm font-medium text-muted-foreground mb-1.5">Target Audience</label>
                 <input 
                   type="text" 
+                  value={audience}
+                  onChange={(e) => setAudience(e.target.value)}
                   placeholder="e.g. College students, remote workers" 
                   className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                 />
@@ -56,7 +84,11 @@ export default function DashboardPage() {
               
               <div>
                 <label className="block text-sm font-medium text-muted-foreground mb-1.5">Vibe / Tone</label>
-                <select className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all appearance-none">
+                <select 
+                  value={vibe}
+                  onChange={(e) => setVibe(e.target.value)}
+                  className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all appearance-none"
+                >
                   <option>Energetic & Fast-paced</option>
                   <option>Aesthetic & Cinematic</option>
                   <option>Educational & Professional</option>
@@ -86,8 +118,7 @@ export default function DashboardPage() {
               <h2 className="text-xl font-semibold text-white">Generated Content</h2>
               {result && (
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm"><Copy size={16} className="mr-2"/> Copy</Button>
-                  <Button variant="outline" size="sm"><Download size={16} className="mr-2"/> Export PDF</Button>
+                  <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(result)}><Copy size={16} className="mr-2"/> Copy</Button>
                 </div>
               )}
             </div>
@@ -98,33 +129,17 @@ export default function DashboardPage() {
                 <h3 className="text-lg font-medium text-white mb-2">Forging Your Content...</h3>
                 <p className="text-muted-foreground max-w-sm">Analyzing niche trends, writing viral hooks, and generating cinematic prompts.</p>
               </div>
+            ) : error ? (
+              <div className="flex-1 flex flex-col items-center justify-center text-center">
+                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400">
+                  <h3 className="font-bold mb-2">API Error</h3>
+                  <p>{error}</p>
+                </div>
+              </div>
             ) : result ? (
               <div className="flex-1 overflow-y-auto space-y-6 pr-2">
-                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                  <h3 className="text-sm font-medium text-primary mb-2 flex items-center"><Calendar size={14} className="mr-1"/> Week 1: Hooking the Audience</h3>
-                  <div className="space-y-4 text-sm text-muted-foreground">
-                    <p><strong className="text-white">Day 1 (Short):</strong> "3 AI tools that feel illegal to know (for creators)." Fast-paced listicle. #3 is ReelForge AI.</p>
-                    <p><strong className="text-white">Day 2 (Community):</strong> Image poll: "How many hours a week do you spend editing?"</p>
-                    <p><strong className="text-white">Day 3 (Long-Form):</strong> "I Automated My Entire YouTube Workflow." Deep dive into AI tools.</p>
-                    <p><strong className="text-white">Day 4 (Short):</strong> "The 5-second hook formula that MrBeast uses." Text-on-screen hook.</p>
-                    <p><strong className="text-white">Day 5 (Short):</strong> "Stop writing your own scripts." Controversial take on AI scripting.</p>
-                  </div>
-                </div>
-                
-                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                  <h3 className="text-sm font-medium text-secondary mb-2 flex items-center"><Video size={14} className="mr-1"/> Day 1 Script Preview</h3>
-                  <div className="space-y-3 text-sm text-muted-foreground">
-                    <p><strong className="text-white">Visual:</strong> Fast-paced screen recording of editing timeline, then cut to you holding a coffee.</p>
-                    <p><strong className="text-white">Audio:</strong> Trending lo-fi beat.</p>
-                    <p><strong className="text-white">Voiceover:</strong> "Stop spending 10 hours a week editing. Here are 3 AI tools that feel illegal to know in 2024. Number 3 literally runs my channel."</p>
-                  </div>
-                </div>
-                
-                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                  <h3 className="text-sm font-medium text-primary mb-2 flex items-center"><Hash size={14} className="mr-1"/> Suggested Hashtags</h3>
-                  <p className="text-sm text-muted-foreground">
-                    #CreatorEconomy #AItools #YouTubeGrowth #ContentCreator #ReelForgeAI
-                  </p>
+                <div className="p-6 rounded-xl bg-white/5 border border-white/10 text-white whitespace-pre-wrap font-medium leading-relaxed">
+                  {result}
                 </div>
               </div>
             ) : (
