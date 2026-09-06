@@ -49,7 +49,7 @@ export async function POST(req: Request) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'llama3-70b-8192', // Using Meta's insanely powerful Llama 3 70B model
+        model: 'llama-3.1-70b-versatile', // Using Meta's newest Llama 3.1 70B model
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.7,
       })
