@@ -1,20 +1,33 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Video, PenTool, Hash, Calendar, Download, Copy, Sparkles, Zap, Image as ImageIcon } from "lucide-react"
+import { Video, Copy, Sparkles, Crown, Lock } from "lucide-react"
 
-export default function DashboardPage() {
+const FREE_LIMIT = 2
+
+export default function GeneratorPage() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [result, setResult] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [usageCount, setUsageCount] = useState(0)
+  const [showPaywall, setShowPaywall] = useState(false)
   
-  // Form State
   const [niche, setNiche] = useState("")
   const [audience, setAudience] = useState("")
   const [vibe, setVibe] = useState("Energetic & Fast-paced")
+
+  useEffect(() => {
+    const count = parseInt(localStorage.getItem('rf_gen_count') || '0', 10)
+    setUsageCount(count)
+  }, [])
   
   const handleGenerate = async () => {
+    if (usageCount >= FREE_LIMIT) {
+      setShowPaywall(true)
+      return
+    }
+
     setIsGenerating(true)
     setError(null)
     setResult(null)
@@ -28,11 +41,14 @@ export default function DashboardPage() {
       
       const data = await response.json()
       
-      if (!response.ok) {
-        throw new Error(data.error || 'Something went wrong')
-      }
+      if (!response.ok) throw new Error(data.error || 'Something went wrong')
       
       setResult(data.result)
+      
+      // Increment usage
+      const newCount = usageCount + 1
+      localStorage.setItem('rf_gen_count', newCount.toString())
+      setUsageCount(newCount)
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -40,113 +56,103 @@ export default function DashboardPage() {
     }
   }
 
+  const remaining = Math.max(0, FREE_LIMIT - usageCount)
+
   return (
     <div className="max-w-6xl mx-auto">
+      {/* Paywall Modal */}
+      {showPaywall && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setShowPaywall(false)}>
+          <div className="bg-[#0d0d14] border border-purple-500/30 rounded-3xl p-8 max-w-md w-full text-center shadow-2xl shadow-purple-500/10" onClick={(e) => e.stopPropagation()}>
+            <div className="w-16 h-16 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-6">
+              <Crown className="text-yellow-400" size={32} />
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-2">Free Limit Reached</h2>
+            <p className="text-muted-foreground text-sm mb-6">You have used all {FREE_LIMIT} free generations. Upgrade to Pro for unlimited AI content.</p>
+            <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold py-6 text-lg rounded-xl mb-3">
+              Upgrade to Pro
+            </Button>
+            <button className="text-xs text-muted-foreground hover:text-white transition-colors" onClick={() => setShowPaywall(false)}>Maybe later</button>
+          </div>
+        </div>
+      )}
+
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold font-outfit text-white mb-2">Welcome back, Creator</h1>
-          <p className="text-muted-foreground">What viral content are we making today?</p>
+          <h1 className="text-3xl font-bold font-outfit text-white mb-2">Script Generator</h1>
+          <p className="text-muted-foreground">Create viral Reel & Shorts scripts with AI.</p>
         </div>
-        <Button variant="glow" onClick={handleGenerate} disabled={isGenerating}>
-          <Sparkles className="mr-2" size={18} />
-          {isGenerating ? "Generating..." : "Generate Reel Script"}
-        </Button>
+        <div className="text-right">
+          <span className={`text-sm font-medium ${remaining > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+            {remaining > 0 ? `${remaining} free left` : 'Limit reached'}
+          </span>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {/* Input Form */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-1 space-y-6">
           <div className="glass-card p-6 rounded-2xl border border-white/10">
-            <h2 className="text-xl font-semibold mb-4 text-white">Project Details</h2>
-            
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-muted-foreground mb-1.5">Business / Niche</label>
-                <input 
-                  type="text" 
-                  value={niche}
-                  onChange={(e) => setNiche(e.target.value)}
-                  placeholder="e.g. Coffee Shop in Austin" 
-                  className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                />
+                <input type="text" value={niche} onChange={(e) => setNiche(e.target.value)} placeholder="e.g. Coffee Shop in Austin" className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-primary outline-none" />
               </div>
-              
               <div>
                 <label className="block text-sm font-medium text-muted-foreground mb-1.5">Target Audience</label>
-                <input 
-                  type="text" 
-                  value={audience}
-                  onChange={(e) => setAudience(e.target.value)}
-                  placeholder="e.g. College students, remote workers" 
-                  className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                />
+                <input type="text" value={audience} onChange={(e) => setAudience(e.target.value)} placeholder="e.g. College students" className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-primary outline-none" />
               </div>
-              
               <div>
                 <label className="block text-sm font-medium text-muted-foreground mb-1.5">Vibe / Tone</label>
-                <select 
-                  value={vibe}
-                  onChange={(e) => setVibe(e.target.value)}
-                  className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all appearance-none"
-                >
+                <select value={vibe} onChange={(e) => setVibe(e.target.value)} className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-primary outline-none appearance-none">
                   <option>Energetic & Fast-paced</option>
                   <option>Aesthetic & Cinematic</option>
                   <option>Educational & Professional</option>
                   <option>Funny & Trendy</option>
                 </select>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-muted-foreground mb-1.5">Product Photo (Optional)</label>
-                <div className="border-2 border-dashed border-white/10 rounded-lg p-6 text-center hover:border-primary/50 transition-colors cursor-pointer bg-white/5">
-                  <ImageIcon className="mx-auto text-muted-foreground mb-2" size={24} />
-                  <p className="text-sm text-muted-foreground">Click to upload or drag & drop</p>
-                </div>
-              </div>
-              
               <Button className="w-full" variant="default" onClick={handleGenerate} disabled={isGenerating}>
-                {isGenerating ? "Analyzing..." : "Generate Reel Script"}
+                {isGenerating ? (
+                  <><Sparkles className="mr-2 animate-spin" size={16}/> Generating...</>
+                ) : usageCount >= FREE_LIMIT ? (
+                  <><Lock className="mr-2" size={16}/> Upgrade to Generate</>
+                ) : (
+                  <><Sparkles className="mr-2" size={16}/> Generate Script</>
+                )}
               </Button>
             </div>
           </div>
         </div>
 
-        {/* Results Area */}
         <div className="md:col-span-2">
-          <div className="glass-card p-6 rounded-2xl border border-white/10 min-h-[500px] flex flex-col">
+          <div className="glass-card p-6 rounded-2xl border border-white/10 min-h-[400px] flex flex-col">
             <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/5">
-              <h2 className="text-xl font-semibold text-white">Generated Content</h2>
+              <h2 className="text-xl font-semibold text-white">Generated Script</h2>
               {result && (
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(result)}><Copy size={16} className="mr-2"/> Copy</Button>
-                </div>
+                <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(result)}><Copy size={16} className="mr-2"/> Copy</Button>
               )}
             </div>
             
             {isGenerating ? (
               <div className="flex-1 flex flex-col items-center justify-center text-center">
                 <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4"></div>
-                <h3 className="text-lg font-medium text-white mb-2">Forging Your Content...</h3>
+                <h3 className="text-lg font-medium text-white mb-2">Forging Your Script...</h3>
                 <p className="text-muted-foreground max-w-sm">Analyzing niche trends, writing viral hooks, and generating cinematic prompts.</p>
               </div>
             ) : error ? (
-              <div className="flex-1 flex flex-col items-center justify-center text-center">
-                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400">
-                  <h3 className="font-bold mb-2">API Error</h3>
+              <div className="flex-1 flex flex-col items-center justify-center">
+                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-center">
                   <p>{error}</p>
                 </div>
               </div>
             ) : result ? (
-              <div className="flex-1 overflow-y-auto space-y-6 pr-2">
-                <div className="p-6 rounded-xl bg-white/5 border border-white/10 text-white whitespace-pre-wrap font-medium leading-relaxed">
-                  {result}
-                </div>
+              <div className="flex-1 overflow-y-auto pr-2 text-white whitespace-pre-wrap leading-relaxed">
+                {result}
               </div>
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-center opacity-50">
                 <Video size={48} className="text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium text-white mb-2">No Content Yet</h3>
-                <p className="text-muted-foreground max-w-sm">Fill out the project details on the left and click Generate to see the magic happen.</p>
+                <h3 className="text-lg font-medium text-white mb-2">No Script Yet</h3>
+                <p className="text-muted-foreground max-w-sm">Fill out the details and click Generate.</p>
               </div>
             )}
           </div>
