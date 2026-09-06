@@ -46,7 +46,7 @@ export default function DashboardLayout({
         <div className="p-4 border-t border-white/5 space-y-1">
           <div className="mb-4 px-3 py-3 rounded-lg bg-primary/10 border border-primary/20 text-center">
             <p className="text-sm font-medium text-primary">Free Forever Plan</p>
-            <p className="text-xs text-muted-foreground mt-1">Powered by Gemini</p>
+            <p className="text-xs text-muted-foreground mt-1">Powered by Groq</p>
           </div>
           
           <Link href="/dashboard/settings" className="flex items-center gap-3 px-3 py-2 rounded-lg text-muted-foreground hover:bg-white/5 hover:text-white transition-colors">
