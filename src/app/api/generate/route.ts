@@ -1,19 +1,16 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
     const { niche, audience, vibe, mode } = await req.json();
 
-    if (!process.env.GEMINI_API_KEY) {
+    // Now using Groq instead of Gemini!
+    if (!process.env.GROQ_API_KEY) {
       return NextResponse.json(
-        { error: 'Missing GEMINI_API_KEY. Please add it to your environment variables.' },
+        { error: 'Missing GROQ_API_KEY in environment variables.' },
         { status: 400 }
       );
     }
-
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
     let prompt = '';
 
@@ -32,7 +29,6 @@ export async function POST(req: Request) {
       NICHE: [5 hashtags]
       TRENDING: [5 hashtags]`;
     } else {
-      // Default to script generator
       prompt = `You are an expert YouTube Shorts and Instagram Reels strategist. 
       Create a highly engaging, viral 15-second video script based on these details:
       - Niche/Business: ${niche || 'General Creator'}
@@ -45,14 +41,33 @@ export async function POST(req: Request) {
       VOICEOVER: [The exact script to be spoken]`;
     }
 
-    const result = await model.generateContent(prompt);
-    const responseText = result.response.text();
+    // Raw fetch to Groq API (OpenAI compatible)
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'llama3-70b-8192', // Using Meta's insanely powerful Llama 3 70B model
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+      })
+    });
 
-    return NextResponse.json({ result: responseText });
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.error?.message || 'Failed to generate content from Groq');
+    }
+
+    const resultText = data.choices[0].message.content;
+
+    return NextResponse.json({ result: resultText });
   } catch (error: any) {
-    console.error('API Error:', error);
+    console.error('Groq API Error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to generate content.' },
+      { error: error.message || 'Server error' },
       { status: 500 }
     );
   }
