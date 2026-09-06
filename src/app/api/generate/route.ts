@@ -49,7 +49,7 @@ export async function POST(req: Request) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'llama-3.1-70b-versatile', // Using Meta's newest Llama 3.1 70B model
+        model: 'openai/gpt-oss-20b', // Using an actively supported Groq model
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.7,
       })
