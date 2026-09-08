@@ -50,9 +50,15 @@ export default function DashboardLayout({
           </div>
           
           <Link href="/dashboard/settings" className="flex items-center gap-3 px-3 py-2 rounded-lg text-muted-foreground hover:bg-white/5 hover:text-white transition-colors">
-            <Settings size={18} />
-            Settings
+            <Settings size={18} /> Settings
           </Link>
+
+          <div className="pt-4 mt-4 border-t border-white/5">
+            <p className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Admin Only</p>
+            <Link href="/dashboard/revenue" className="flex items-center gap-3 px-3 py-2 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors">
+              <TrendingUp size={18} /> SaaS Revenue
+            </Link>
+          </div>
           <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-red-400 hover:bg-red-400/10 transition-colors">
             <LogOut size={18} />
             Sign Out
